@@ -39,7 +39,7 @@ public class Main {
 		options.addOption("of", "output-file", true, "Use a file instead of the standard output");
 		options.addOption("if", "input-file", true, "Use a file instead of the standard input");
 
-		options.addOption(null, "chrome-driver", true, "Chrome driver's path");
+		options.addOption(null, "chrome-driver", true, "Chrome driver's path, default value: ~/bin/chromedriver");
 		options.addOption(null, "chrome-path", true, "path to the Chrome executable");
 		options.addOption(null, "headless", false, "use Chrome's headless mode");
 
@@ -56,19 +56,11 @@ public class Main {
 		final String inputFile = cmd.hasOption("if") ? cmd.getOptionValue("if") : null;
 		final String outputFile = cmd.hasOption("of") ? cmd.getOptionValue("of") : null;
 
-		if (!cmd.hasOption("chrome-driver"))
-			throw new RuntimeException("Chrome driver path is missing");
-
-		System.setProperty("webdriver.chrome.driver", cmd.getOptionValue("chrome-driver"));
+		System.setProperty("webdriver.chrome.driver", getChromeDriverLocation(cmd));
 
 		// Initialize browser
 		final ChromeOptions chromeOptions = new ChromeOptions();
 		chromeOptions.addArguments("remote-debugging-port=12345");
-		if (cmd.hasOption("chrome-path")) {
-			final String chromePath = cmd.getOptionValue("chrome-path");
-			log.info("Using Chromium executable {}", chromePath);
-			chromeOptions.setBinary(chromePath);
-		}
 
 		if (cmd.hasOption("headless")) {
 			log.info("Using Chromium in headless mode");
@@ -106,7 +98,21 @@ public class Main {
 		}
 
 		// Close browser
-		driver.close();
+		driver.quit();
+	}
+
+	private static String getChromeDriverLocation(CommandLine cmd) {
+		// chrome-driver option is not present -> use default location
+		if (!cmd.hasOption("chrome-driver"))
+			return System.getProperty("user.home") + "/bin/chromedriver";
+
+		final String chromeDriver = cmd.getOptionValue("chrome-driver");
+
+		// the path is relative to the user's home directory
+		if (chromeDriver.charAt(0) == '~')
+			return System.getProperty("user.home") + chromeDriver.substring(1);
+
+		return chromeDriver;
 	}
 
 	private static void printHelp(Options options) {
