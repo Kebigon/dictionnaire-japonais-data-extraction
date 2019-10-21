@@ -19,7 +19,7 @@ public class SearchPageProcessor extends PageProcessor {
 	private static final int ENTRY_PATH_LENGTH = ENTRY_PATH.length();
 
 	private static final String RESULTS_LIST_XPATH = "//ul[@class='resultsList']/li/a";
-	private static final String RESULT_XPATH = "./span[@class='jap']/span[@class='jp'|@class='kana'|@class='romaji']|./span[@class='fr'|@class='detail']";
+	private static final String RESULT_XPATH = "./span[@class='jap']/span[@class='jp'|@class='kana']|./span[@class='fr']";
 
 	public SearchPageProcessor(WebDriver driver) {
 		super(driver);
@@ -51,14 +51,8 @@ public class SearchPageProcessor extends PageProcessor {
 				case "kana":
 					builder.furigana(element.getText());
 					break;
-				case "romaji":
-					builder.romaji(element.getText());
-					break;
 				case "fr":
 					builder.french(element.getText());
-					break;
-				case "detail":
-					builder.details(element.getText());
 					break;
 				}
 			}

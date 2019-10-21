@@ -48,7 +48,7 @@ public class DataWriter<T extends Comparable<T>> implements Closeable {
 		}
 
 		final long stopTime = System.nanoTime();
-		log.info("{} values writtent in {} ms", values.size(), (stopTime - startTime) / 1000000);
+		log.info("{} values written in {} ms", values.size(), (stopTime - startTime) / 1000000);
 	}
 
 	@Override

@@ -14,16 +14,12 @@ import lombok.NoArgsConstructor;
 public class WordEntry implements Comparable<WordEntry> {
 	@JsonProperty("id")
 	private int id;
-	@JsonProperty("jp")
+	@JsonProperty("j")
 	private String japanese;
-	@JsonProperty("kn")
+	@JsonProperty("k")
 	private String furigana;
-	@JsonProperty("rm")
-	private String romaji;
-	@JsonProperty("fr")
+	@JsonProperty("f")
 	private String french;
-	@JsonProperty("dt")
-	private String details;
 
 	@Override
 	public int compareTo(WordEntry o) {
